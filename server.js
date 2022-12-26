@@ -17,20 +17,21 @@ function homeHandler(req, res) {
 }
 
 function Movie(data) {
-     (this.title = data.title), (this.overview = data.overview);
+  (this.movie = data.title), (this.summary = data.overview);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // axios get all
 
-app.get("/trending", getHandler);
+app.get("/trend", getHandler);
+// , { headers: { "Accept-Encoding": "gzip,deflate,compress" } }
 function getHandler(req, res) {
   url =
-    "https://api.themoviedb.org/3/trending/all/week?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US";
+    "https://api.themoviedb.org/3/trending/all/week?api_key=5ccf75088cf2cb9dc0801bc19f16f285&language=en-US";
   axios
-    .get(url, { headers: { "Accept-Encoding": "gzip,deflate,compress" } })
+    .get(url)
     .then((result) => {
-      // console.log(result.data.results , "kkkkkkk")
+      console.log(result.data.results);
       data = result.data.results;
       myData = data.map((e) => {
         return new Movie(e);
@@ -46,30 +47,30 @@ function getHandler(req, res) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 // get one by id
 
-app.get("/trending/:id", getHandler);
-function getHandler(req, res) {
-  url =
-    "https://api.themoviedb.org/3/trending/all/week?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US";
-  axios
-    .get(url, { headers: { "Accept-Encoding": "gzip,deflate,compress" } })
-    .then((result) => {
-      id = req.params.id;
+// app.get("/trending/:id", getHandler);
+// function getHandler(req, res) {
+//   url =
+//     "https://api.themoviedb.org/3/trending/all/week?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US";
+//   axios
+//     .get(url, { headers: { "Accept-Encoding": "gzip,deflate,compress" } })
+//     .then((result) => {
+//       id = req.params.id;
 
-      console.log(result.data.results);
-      data = result.data.results;
-      myData = data.map((e) => {
-        if (e.id == id) {
-          console.log(new Movie(e));
-          return new Movie(e);
-        }
-      });
-      res.json(myData);
-    })
+//       console.log(result.data.resultscfr);
+//       data = result.data.results;
+//       myData = data.map((e) => {
+//         if (e.id == id) {
+//           // console.log(new Movie(e));
+//           return new Movie(e);
+//         }
+//       });
+//       res.json(myData);
+//     })
 
-    .catch((result) => {
-      console.log(result);
-    });
-}
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //axios search
 
@@ -80,21 +81,22 @@ function searchHandler(req, res) {
   axios
     .get(url, { headers: { "Accept-Encoding": "gzip,deflate,compress" } })
     .then((result) => {
-      data = result.data.results;
-      console.log(data);
+      data = result.data.results.map((e) => {
+        return new Movie(e);
+      });
+
       res.json(data);
 
       //     console.log(result);
-    })
-    .catch((result) => {
-      console.log(result);
     });
+  //     .catch((result) => {
+  //      //  console.log(result);
+  //     });
 }
 
 // function handleeror
 // function handleError(err, req, res) {
-//      res.status(500).send(err); 
-
+//      res.status(500).send(err);
 
 // }
 
